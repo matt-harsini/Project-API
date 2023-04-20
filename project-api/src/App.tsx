@@ -1,4 +1,4 @@
-import { Key, useEffect, useState } from "react";
+import { ChangeEvent, FormEventHandler, Key, useEffect, useState } from "react";
 import styles from "./App.module.css";
 import { Input, IconButton, Flex } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
@@ -16,7 +16,7 @@ function App() {
   const [data, setData] = useState<any>(undefined);
   const [query, setQuery] = useState("");
   const [input, setInput] = useState("");
-
+  const [error, setError] = useState(false);
   useEffect(() => {
     async function fetchWeatherData() {
       try {
@@ -26,9 +26,11 @@ function App() {
         const response = await fetch(
           `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${OWM_KEY}`
         );
+        if (!response.ok) throw new Error("Response status is not ok");
         const payload = await response.json();
         setData(payload);
       } catch (error: unknown) {
+        setError(true);
         if (error instanceof Error) throw new Error(error.message);
         throw new Error("An unexpected error occurred, please try again");
       }
@@ -41,11 +43,14 @@ function App() {
     async function fetchWeatherData() {
       try {
         const response = await fetch(
-          `api.openweathermap.org/data/2.5/forecast?q=${query}&units=imperial&appid=${OWM_KEY}`
+          `https://api.openweathermap.org/data/2.5/forecast?q=${query}&appid=f2193977d3b707f549ed77442ec2b33e`
         );
+        if (!response.ok) throw new Error("Response status is not ok");
         const payload = await response.json();
+        console.log(payload);
         setData(payload);
       } catch (error: unknown) {
+        setError(true);
         if (error instanceof Error) throw new Error(error.message);
         throw new Error("An unexpected error occurred, please try again");
       }
@@ -53,9 +58,15 @@ function App() {
     fetchWeatherData();
   }, [query]);
 
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    setQuery(input);
+    setInput("");
+  };
+  if (error) return <div>Error occurred, please try again</div>;
   return (
     <div className={styles.container}>
-      <form className={styles.form} onSubmit={() => setQuery(input)}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <Input
           placeholder="Enter location"
           onChange={(e) => setInput(e.target.value)}
@@ -64,6 +75,7 @@ function App() {
         <IconButton
           aria-label="Search weather at specified location"
           icon={<SearchIcon />}
+          type="submit"
         />
       </form>
       <Flex gap={12} paddingX={32} maxW="100%">

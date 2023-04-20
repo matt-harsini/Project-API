@@ -18,11 +18,9 @@ interface Data {
 }
 
 function WeatherCard({ obj, index }: Data) {
-  console.log(obj);
-
   return (
     <Card maxW="sm">
-      <WeatherIcon name="owm" iconId={obj.weather[0].id} />
+      <WeatherIcon name="owm" iconId={`${obj.weather[0].id}`} />
       <CardBody>
         <Stack mt="6" spacing="3">
           <Heading size="md">Living room Sofa</Heading>
