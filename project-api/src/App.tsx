@@ -1,9 +1,15 @@
-import { ChangeEvent, FormEventHandler, Key, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./App.module.css";
-import { Input, IconButton, Flex } from "@chakra-ui/react";
+import {
+  Input,
+  InputGroup,
+  InputRightElement,
+  Flex,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import WeatherCard from "./components/WeatherCard";
-
 const OWM_KEY = "f2193977d3b707f549ed77442ec2b33e";
 
 function getLocation(): Promise<GeolocationPosition> {
@@ -47,7 +53,6 @@ function App() {
         );
         if (!response.ok) throw new Error("Response status is not ok");
         const payload = await response.json();
-        console.log(payload);
         setData(payload);
       } catch (error: unknown) {
         setError(true);
@@ -67,16 +72,17 @@ function App() {
     return (
       <div className={styles.container}>
         <form className={styles.form} onSubmit={handleSubmit}>
-          <Input
-            placeholder="Enter location"
-            onChange={(e) => setInput(e.target.value)}
-            value={input}
-          />
-          <IconButton
-            aria-label="Search weather at specified location"
-            icon={<SearchIcon />}
-            type="submit"
-          />
+          <InputGroup>
+            <Input
+              placeholder="Enter location"
+              onChange={(e) => setInput(e.target.value)}
+              value={input}
+            />
+            <InputRightElement
+              aria-label="Search weather at specified location"
+              children={<SearchIcon />}
+            />
+          </InputGroup>
         </form>
         <div>No results found, please try again</div>
       </div>
@@ -84,17 +90,24 @@ function App() {
   }
   return (
     <div className={styles.container}>
+      <Stack>
+        <Text color="blue.600" fontSize="2xl">
+          {data?.city.country + " "}
+          {data?.city.name}
+        </Text>
+      </Stack>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <Input
-          placeholder="Enter location"
-          onChange={(e) => setInput(e.target.value)}
-          value={input}
-        />
-        <IconButton
-          aria-label="Search weather at specified location"
-          icon={<SearchIcon />}
-          type="submit"
-        />
+        <InputGroup>
+          <Input
+            placeholder="Enter location"
+            onChange={(e) => setInput(e.target.value)}
+            value={input}
+          />
+          <InputRightElement
+            aria-label="Search weather at specified location"
+            children={<SearchIcon />}
+          />
+        </InputGroup>
       </form>
       <Flex gap={12} paddingX={32} maxW="100%">
         {data !== undefined &&
