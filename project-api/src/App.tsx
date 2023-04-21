@@ -91,36 +91,40 @@ function App() {
   }
   return (
     <div className={styles.container}>
-      <Stack>
-        <Text color="blue.600" fontSize="2xl">
-          {data === undefined
-            ? "Loading..."
-            : data?.city.country + " " + data?.city.name}
-        </Text>
-      </Stack>
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <InputGroup>
-          <Input
-            placeholder="Enter location"
-            onChange={(e) => setInput(e.target.value)}
-            value={input}
-          />
-          <InputRightElement
-            aria-label="Search weather at specified location"
-            children={<SearchIcon />}
-          />
-        </InputGroup>
-      </form>
-      <Flex gap={12} paddingX={32} maxW="100%">
-        {data !== undefined &&
-          data.list.map((obj: any, index: number) => {
-            const [date, time] = obj.dt_txt.split(" ");
-            if (index === 0)
-              return <WeatherCard obj={obj} index={index} key={obj.dt_txt} />;
-            if (time === "00:00:00")
-              return <WeatherCard obj={obj} index={index} key={obj.dt_txt} />;
-          })}
-      </Flex>
+      <div className={styles["form-container"]}>
+        <Stack>
+          <Text color="blue.600" fontSize="2xl">
+            {data === undefined
+              ? "Loading..."
+              : data?.city.country + " " + data?.city.name}
+          </Text>
+        </Stack>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <InputGroup>
+            <Input
+              placeholder="Enter location"
+              onChange={(e) => setInput(e.target.value)}
+              value={input}
+            />
+            <InputRightElement
+              aria-label="Search weather at specified location"
+              children={<SearchIcon />}
+            />
+          </InputGroup>
+        </form>
+      </div>
+      <div className={styles["card-container"]}>
+        <Flex gap={12} paddingX={32}>
+          {data !== undefined &&
+            data.list.map((obj: any, index: number) => {
+              const [date, time] = obj.dt_txt.split(" ");
+              if (index === 0)
+                return <WeatherCard obj={obj} index={index} key={obj.dt_txt} />;
+              if (time === "00:00:00")
+                return <WeatherCard obj={obj} index={index} key={obj.dt_txt} />;
+            })}
+        </Flex>
+      </div>
     </div>
   );
 }
