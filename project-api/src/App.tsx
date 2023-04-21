@@ -148,16 +148,14 @@ function App() {
         </form>
       </div>
       <div className={styles["card-container"]}>
-        <Flex gap={12} paddingX={32}>
-          {data !== undefined &&
-            data.list.map((obj: any, index: number) => {
-              const [date, time] = obj.dt_txt.split(" ");
-              if (index === 0)
-                return <WeatherCard obj={obj} index={index} key={obj.dt_txt} />;
-              if (time === "00:00:00")
-                return <WeatherCard obj={obj} index={index} key={obj.dt_txt} />;
-            })}
-        </Flex>
+        {data !== undefined &&
+          data.list.map((obj: any, index: number) => {
+            const [date, time] = obj.dt_txt.split(" ");
+            if (index === 0)
+              return <WeatherCard obj={obj} index={index} key={obj.dt_txt} />;
+            if (time === "00:00:00")
+              return <WeatherCard obj={obj} index={index} key={obj.dt_txt} />;
+          })}
       </div>
     </div>
   );
