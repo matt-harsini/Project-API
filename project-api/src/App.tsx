@@ -7,9 +7,13 @@ import {
   Flex,
   Stack,
   Text,
+  Center,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import WeatherCard from "./components/WeatherCard";
+import { useColorMode } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
+import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 
 const OWM_KEY = "f2193977d3b707f549ed77442ec2b33e";
 
@@ -24,6 +28,9 @@ function App() {
   const [query, setQuery] = useState("");
   const [input, setInput] = useState("");
   const [error, setError] = useState(false);
+
+  const { colorMode, toggleColorMode } = useColorMode();
+
   useEffect(() => {
     async function fetchWeatherData() {
       try {
@@ -72,26 +79,53 @@ function App() {
   if (error) {
     return (
       <div className={styles.container}>
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <InputGroup>
-            <Input
-              placeholder="Enter location"
-              onChange={(e) => setInput(e.target.value)}
-              value={input}
-            />
-            <InputRightElement
-              aria-label="Search weather at specified location"
-              children={<SearchIcon />}
-            />
-          </InputGroup>
-        </form>
-        <div>No results found, please try again</div>
+        <div className={styles["form-container"]}>
+          <Button onClick={() => toggleColorMode()} size="lg">
+            {colorMode === "dark" ? (
+              <SunIcon color="gray.50" boxSize={6} />
+            ) : (
+              <MoonIcon color="gray.900" boxSize={6} />
+            )}
+          </Button>
+          <Stack>
+            <Text color="blue.600" fontSize="2xl">
+              {data === undefined
+                ? "Loading..."
+                : data?.city.country + " " + data?.city.name}
+            </Text>
+          </Stack>
+          <form className={styles.form} onSubmit={handleSubmit}>
+            <InputGroup>
+              <Input
+                placeholder="Enter location"
+                onChange={(e) => setInput(e.target.value)}
+                value={input}
+              />
+              <InputRightElement
+                aria-label="Search weather at specified location"
+                children={<SearchIcon />}
+              />
+            </InputGroup>
+          </form>
+        </div>
+        <Center marginTop={32}>
+          <Text fontSize="2xl">
+            Something unexpected happened, please try again
+          </Text>
+        </Center>
       </div>
     );
   }
   return (
     <div className={styles.container}>
       <div className={styles["form-container"]}>
+        <Button onClick={() => toggleColorMode()} size="lg">
+          {colorMode === "dark" ? (
+            <SunIcon color="gray.50" boxSize={6} />
+          ) : (
+            <MoonIcon color="gray.900" boxSize={6} />
+          )}
+        </Button>
         <Stack>
           <Text color="blue.600" fontSize="2xl">
             {data === undefined
