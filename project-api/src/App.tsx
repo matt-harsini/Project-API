@@ -43,7 +43,7 @@ function App() {
     async function fetchWeatherData() {
       try {
         const response = await fetch(
-          `https://api.openweathermap.org/data/2.5/forecast?q=${query}&appid=f2193977d3b707f549ed77442ec2b33e`
+          `https://api.openweathermap.org/data/2.5/forecast?q=${query}&units=imperial&appid=f2193977d3b707f549ed77442ec2b33e`
         );
         if (!response.ok) throw new Error("Response status is not ok");
         const payload = await response.json();
@@ -63,7 +63,25 @@ function App() {
     setQuery(input);
     setInput("");
   };
-  if (error) return <div>Error occurred, please try again</div>;
+  if (error) {
+    return (
+      <div className={styles.container}>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <Input
+            placeholder="Enter location"
+            onChange={(e) => setInput(e.target.value)}
+            value={input}
+          />
+          <IconButton
+            aria-label="Search weather at specified location"
+            icon={<SearchIcon />}
+            type="submit"
+          />
+        </form>
+        <div>No results found, please try again</div>
+      </div>
+    );
+  }
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={handleSubmit}>
@@ -84,7 +102,7 @@ function App() {
             const [date, time] = obj.dt_txt.split(" ");
             if (index === 0)
               return <WeatherCard obj={obj} index={index} key={obj.dt_txt} />;
-            if (time === "12:00:00")
+            if (time === "00:00:00")
               return <WeatherCard obj={obj} index={index} key={obj.dt_txt} />;
           })}
       </Flex>

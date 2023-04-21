@@ -6,4 +6,8 @@
   box-sizing: border-box;
 }
 
-
+.wi {
+  margin: 0 auto;
+  margin-top: 48px;
+  transform: scale(2);
+}
