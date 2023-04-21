@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import WeatherCard from "./components/WeatherCard";
+
 const OWM_KEY = "f2193977d3b707f549ed77442ec2b33e";
 
 function getLocation(): Promise<GeolocationPosition> {
@@ -92,8 +93,9 @@ function App() {
     <div className={styles.container}>
       <Stack>
         <Text color="blue.600" fontSize="2xl">
-          {data?.city.country + " "}
-          {data?.city.name}
+          {data === undefined
+            ? "Loading..."
+            : data?.city.country + " " + data?.city.name}
         </Text>
       </Stack>
       <form className={styles.form} onSubmit={handleSubmit}>
