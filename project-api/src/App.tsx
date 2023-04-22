@@ -17,40 +17,13 @@ import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 
 const OWM_KEY = "f2193977d3b707f549ed77442ec2b33e";
 
-function getLocation(): Promise<GeolocationPosition> {
-  return new Promise((resolve, reject) => {
-    navigator.geolocation?.getCurrentPosition(resolve, reject);
-  });
-}
-
 function App() {
   const [data, setData] = useState<any>(undefined);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState("Los Angeles");
   const [input, setInput] = useState("");
   const [error, setError] = useState(false);
 
   const { colorMode, toggleColorMode } = useColorMode();
-
-  useEffect(() => {
-    async function fetchWeatherData() {
-      try {
-        const {
-          coords: { latitude: lat, longitude: lon },
-        } = await getLocation();
-        const response = await fetch(
-          `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${OWM_KEY}`
-        );
-        if (!response.ok) throw new Error("Response status is not ok");
-        const payload = await response.json();
-        setData(payload);
-      } catch (error: unknown) {
-        setError(true);
-        if (error instanceof Error) throw new Error(error.message);
-        throw new Error("An unexpected error occurred, please try again");
-      }
-    }
-    fetchWeatherData();
-  }, []);
 
   useEffect(() => {
     if (query === "") return;
